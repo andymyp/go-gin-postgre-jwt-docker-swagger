@@ -88,3 +88,9 @@ func Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"status": 1, "data": response})
 }
+
+func TestAuth(c *gin.Context) {
+	user, _ := c.Get("user")
+	claims, _ := c.Get("claims")
+	c.JSON(http.StatusOK, gin.H{"status": 1, "user": user, "claims": claims})
+}
