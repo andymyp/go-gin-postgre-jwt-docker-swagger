@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -20,4 +21,16 @@ type User struct {
 func (user *User) BeforeCreate(tx *gorm.DB) (err error) {
 	user.ID = uuid.New()
 	return nil
+}
+
+type Claims struct {
+	ID uuid.UUID `json:"id"`
+	jwt.StandardClaims
+}
+
+type UserResponse struct {
+	ID    uuid.UUID `json:"id"`
+	Name  string    `json:"name"`
+	Email string    `json:"email"`
+	Token string    `json:"token"`
 }

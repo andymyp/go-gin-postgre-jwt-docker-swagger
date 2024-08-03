@@ -8,4 +8,5 @@ import (
 func AuthRoute(router *gin.Engine) {
 	v1 := router.Group("/api/v1")
 	v1.POST("/auth/register", controllers.Register)
+	v1.POST("/auth/login", controllers.Login)
 }
