@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/andymyp/go-gin-postgre-jwt-docker-swagger/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -40,7 +41,7 @@ func ConnectDatabase() {
 
 	fmt.Println("Connected to Database: ", sqlDB.Ping() == nil)
 
-	//db.AutoMigrate()
+	db.AutoMigrate(&models.User{})
 
 	DB = db
 }
