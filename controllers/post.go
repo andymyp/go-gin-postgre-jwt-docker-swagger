@@ -7,6 +7,7 @@ import (
 	"github.com/andymyp/go-gin-postgre-jwt-docker-swagger/helpers"
 	"github.com/andymyp/go-gin-postgre-jwt-docker-swagger/models"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func CreatePost(c *gin.Context) {
@@ -60,6 +61,34 @@ func GetPosts(c *gin.Context) {
 			CreatedAt: post.CreatedAt,
 			UpdatedAt: post.UpdatedAt,
 		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": 1, "data": response})
+}
+
+func GetPost(c *gin.Context) {
+	var post models.Post
+
+	id := c.Param("id")
+
+	if err := config.DB.Debug().Preload("User").Where("id=?", id).First(&post).Error; err != nil {
+		switch err {
+		case gorm.ErrRecordNotFound:
+			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"status": 0, "message": "Post not found!"})
+			return
+		default:
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"status": 0, "message": err.Error()})
+			return
+		}
+	}
+
+	response := models.PostResponse{
+		ID:        post.ID,
+		User:      models.UserResponse{ID: post.User.ID, Name: post.User.Name, Email: post.User.Email},
+		Title:     post.Title,
+		Content:   post.Content,
+		CreatedAt: post.CreatedAt,
+		UpdatedAt: post.UpdatedAt,
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": 1, "data": response})

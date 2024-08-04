@@ -11,4 +11,5 @@ func PostRoute(router *gin.Engine) {
 	v1.Use(middlewares.AuthMiddleware())
 	v1.POST("/post", controllers.CreatePost)
 	v1.GET("/posts", controllers.GetPosts)
+	v1.GET("/post/:id", controllers.GetPost)
 }
