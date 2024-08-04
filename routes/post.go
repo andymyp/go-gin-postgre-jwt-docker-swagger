@@ -12,4 +12,5 @@ func PostRoute(router *gin.Engine) {
 	v1.POST("/post", controllers.CreatePost)
 	v1.GET("/posts", controllers.GetPosts)
 	v1.GET("/post/:id", controllers.GetPost)
+	v1.PUT("/post/:id", controllers.UpdatePost)
 }

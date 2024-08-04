@@ -93,3 +93,34 @@ func GetPost(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"status": 1, "data": response})
 }
+
+func UpdatePost(c *gin.Context) {
+	var input struct {
+		Title   string `json:"title" validate:"required"`
+		Content string `json:"content" validate:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"status": 0, "message": err.Error()})
+		return
+	}
+
+	if err := helpers.ValidateStruct(input); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"status": 0, "message": err.Error()})
+		return
+	}
+
+	user, _ := c.Get("user")
+	actualUser, _ := user.(models.UserResponse)
+
+	var post models.Post
+
+	id := c.Param("id")
+
+	if config.DB.Model(&post).Where("id=? AND user_id=?", id, actualUser.ID).Updates(&input).RowsAffected == 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"status": 0, "message": "Update post failed!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": 1, "message": "Post updated."})
+}
