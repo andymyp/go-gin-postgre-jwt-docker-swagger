@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/andymyp/go-gin-postgre-jwt-docker-swagger/models"
@@ -13,13 +12,16 @@ import (
 var DB *gorm.DB
 
 func ConnectDatabase() {
-	HOST := os.Getenv("POSTGRES_HOST")
-	PORT := os.Getenv("POSTGRES_PORT")
-	USERNAME := os.Getenv("POSTGRES_USERNAME")
-	PASSWORD := os.Getenv("POSTGRES_PASSWORD")
-	DATABASE := os.Getenv("POSTGRES_DATABASE")
+	//! For local
+	//HOST := os.Getenv("POSTGRES_HOST")
+	//PORT := os.Getenv("POSTGRES_PORT")
+	//USERNAME := os.Getenv("POSTGRES_USERNAME")
+	//PASSWORD := os.Getenv("POSTGRES_PASSWORD")
+	//DATABASE := os.Getenv("POSTGRES_DATABASE")
+	//dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", USERNAME, PASSWORD, HOST, PORT, DATABASE)
 
-	dsn := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", USERNAME, PASSWORD, HOST, PORT, DATABASE)
+	//! For Docker
+	dsn := "postgres://postgres:postgres@postgresql_db/db_crud_api?sslmode=disable"
 
 	db, err := gorm.Open(postgres.Open(dsn))
 	if err != nil {
