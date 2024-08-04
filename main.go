@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/andymyp/go-gin-postgre-jwt-docker-swagger/config"
@@ -23,11 +24,12 @@ func main() {
 
 	//! Idle
 	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{"message": "API server is running"})
+		c.JSON(http.StatusOK, gin.H{"message": "API server is running"})
 	})
 
-	//! Public Routes
+	//! All Routes
 	routes.AuthRoute(router)
+	routes.UserRoute(router)
 
 	APP_PORT := os.Getenv("APP_PORT")
 	APP_PORT = fmt.Sprintf(":%s", APP_PORT)
