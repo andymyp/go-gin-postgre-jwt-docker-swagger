@@ -9,5 +9,6 @@ import (
 func UserRoute(router *gin.Engine) {
 	v1 := router.Group("/api/v1")
 	v1.Use(middlewares.AuthMiddleware())
-	v1.GET("/user/:id", controllers.UserProfile)
+	v1.GET("/user/profile", controllers.UserProfile)
+	v1.GET("/user/posts", controllers.GetMyPosts)
 }
