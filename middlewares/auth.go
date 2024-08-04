@@ -51,7 +51,6 @@ func AuthMiddleware() gin.HandlerFunc {
 			ID:    user.ID,
 			Name:  user.Name,
 			Email: user.Email,
-			Token: user.Token,
 		}
 
 		c.Set("user", response)

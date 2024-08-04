@@ -10,4 +10,5 @@ func PostRoute(router *gin.Engine) {
 	v1 := router.Group("/api/v1")
 	v1.Use(middlewares.AuthMiddleware())
 	v1.POST("/post", controllers.CreatePost)
+	v1.GET("/posts", controllers.GetPosts)
 }

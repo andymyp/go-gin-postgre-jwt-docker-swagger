@@ -21,3 +21,12 @@ func (post *Post) BeforeCreate(tx *gorm.DB) (err error) {
 	post.ID = uuid.New()
 	return nil
 }
+
+type PostResponse struct {
+	ID        uuid.UUID    `json:"id"`
+	User      UserResponse `json:"user"`
+	Title     string       `json:"title"`
+	Content   string       `json:"content"`
+	CreatedAt time.Time    `json:"created_at"`
+	UpdatedAt time.Time    `json:"updated_at"`
+}

@@ -40,3 +40,27 @@ func CreatePost(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"status": 1, "message": "Post created."})
 }
+
+func GetPosts(c *gin.Context) {
+	var post []models.Post
+
+	if err := config.DB.Debug().Preload("User").Find(&post).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"status": 0, "message": err.Error()})
+		return
+	}
+
+	var response []models.PostResponse
+
+	for _, post := range post {
+		response = append(response, models.PostResponse{
+			ID:        post.ID,
+			User:      models.UserResponse{ID: post.User.ID, Name: post.User.Name, Email: post.User.Email},
+			Title:     post.Title,
+			Content:   post.Content,
+			CreatedAt: post.CreatedAt,
+			UpdatedAt: post.UpdatedAt,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": 1, "data": response})
+}

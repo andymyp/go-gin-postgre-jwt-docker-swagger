@@ -25,12 +25,10 @@ func UserProfile(c *gin.Context) {
 		}
 	}
 
-	response := models.UserProfile{
-		ID:        user.ID,
-		Name:      user.Name,
-		Email:     user.Email,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
+	response := models.UserResponse{
+		ID:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": 1, "data": response})
