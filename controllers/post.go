@@ -10,11 +10,17 @@ import (
 	"gorm.io/gorm"
 )
 
+// CreatePost 		godoc
+// @Security 			Bearer
+// @Summary      	Create post
+// @Tags         	User
+// @Accept       	json
+// @Produce      	json
+// @Param        	request body models.InputPost true "Payload [Raw]"
+// @Success      	200 "ok"
+// @Router       	/post [post]
 func CreatePost(c *gin.Context) {
-	var input struct {
-		Title   string `json:"title" validate:"required"`
-		Content string `json:"content" validate:"required"`
-	}
+	var input models.InputPost
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"status": 0, "message": err.Error()})
@@ -42,6 +48,14 @@ func CreatePost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": 1, "message": "Post created."})
 }
 
+// GetPosts 			godoc
+// @Security 			Bearer
+// @Summary      	Get all posts
+// @Tags         	Post
+// @Accept       	json
+// @Produce      	json
+// @Success      	200 "ok"
+// @Router       	/posts [get]
 func GetPosts(c *gin.Context) {
 	var post []models.Post
 
@@ -66,6 +80,15 @@ func GetPosts(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": 1, "data": response})
 }
 
+// GetPost 				godoc
+// @Security 			Bearer
+// @Summary      	Get post
+// @Tags         	Post
+// @Accept       	json
+// @Produce      	json
+// @Param        	id path string true "Post ID"
+// @Success      	200 "ok"
+// @Router       	/post/{id} [get]
 func GetPost(c *gin.Context) {
 	var post models.Post
 
@@ -94,11 +117,18 @@ func GetPost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": 1, "data": response})
 }
 
+// UpdatePost 		godoc
+// @Security 			Bearer
+// @Summary      	Update post
+// @Tags         	User
+// @Accept       	json
+// @Produce      	json
+// @Param        	id path string true "Post ID"
+// @Param        	request body models.InputPost true "Payload [Raw]"
+// @Success      	200 "ok"
+// @Router       	/post/{id} [put]
 func UpdatePost(c *gin.Context) {
-	var input struct {
-		Title   string `json:"title" validate:"required"`
-		Content string `json:"content" validate:"required"`
-	}
+	var input models.InputPost
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"status": 0, "message": err.Error()})
@@ -125,6 +155,15 @@ func UpdatePost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": 1, "message": "Post updated."})
 }
 
+// DeletePost 		godoc
+// @Security 			Bearer
+// @Summary      	Delete post
+// @Tags         	User
+// @Accept       	json
+// @Produce      	json
+// @Param        	id path string true "Post ID"
+// @Success      	200 "ok"
+// @Router       	/post/{id} [delete]
 func DeletePost(c *gin.Context) {
 	user, _ := c.Get("user")
 	actualUser, _ := user.(models.UserResponse)
@@ -141,6 +180,15 @@ func DeletePost(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": 1, "message": "Post deleted."})
 }
 
+// SearchPosts 		godoc
+// @Security 			Bearer
+// @Summary      	Search posts
+// @Tags         	Post
+// @Accept       	json
+// @Produce      	json
+// @Param        	query query string true "Search"
+// @Success      	200 "ok"
+// @Router       	/posts/search [get]
 func SearchPosts(c *gin.Context) {
 	query := c.Query("query")
 

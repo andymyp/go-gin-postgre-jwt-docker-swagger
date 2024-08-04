@@ -30,3 +30,8 @@ type PostResponse struct {
 	CreatedAt time.Time    `json:"created_at"`
 	UpdatedAt time.Time    `json:"updated_at"`
 }
+
+type InputPost struct {
+	Title   string `json:"title" validate:"required"`
+	Content string `json:"content" validate:"required"`
+}

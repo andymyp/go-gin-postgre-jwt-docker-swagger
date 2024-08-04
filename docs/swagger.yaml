@@ -1,0 +1,254 @@
+basePath: /api/v1
+definitions:
+  models.InputPost:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    required:
+    - content
+    - title
+    type: object
+  models.UserLogin:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  models.UserRegister:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        minLength: 6
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: andymyp1997@gmail.com
+    name: API Support
+  description: Golang API with Gin, Postgre, JWT, Docker, and Swagger
+  title: Go Gin API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Payload [Raw]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+      summary: Login user
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Payload [Raw]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserRegister'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+      summary: Register user
+      tags:
+      - Auth
+  /auth/test:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+      security:
+      - Bearer: []
+      summary: Test auth
+      tags:
+      - Auth
+  /post:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Payload [Raw]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.InputPost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+      security:
+      - Bearer: []
+      summary: Create post
+      tags:
+      - User
+  /post/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+      security:
+      - Bearer: []
+      summary: Delete post
+      tags:
+      - User
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+      security:
+      - Bearer: []
+      summary: Get post
+      tags:
+      - Post
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Payload [Raw]
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.InputPost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+      security:
+      - Bearer: []
+      summary: Update post
+      tags:
+      - User
+  /posts:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+      security:
+      - Bearer: []
+      summary: Get all posts
+      tags:
+      - Post
+  /posts/search:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Search
+        in: query
+        name: query
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+      security:
+      - Bearer: []
+      summary: Search posts
+      tags:
+      - Post
+  /user/posts:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+      security:
+      - Bearer: []
+      summary: Get my posts
+      tags:
+      - User
+  /user/profile:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+      security:
+      - Bearer: []
+      summary: User profile
+      tags:
+      - User
+schemes:
+- http
+- https
+securityDefinitions:
+  Bearer:
+    description: Enter the token with the `Bearer prefix`, e.g. 'Bearer abcde12345'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

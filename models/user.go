@@ -40,3 +40,14 @@ type UserResponse struct {
 	Name  string    `json:"name"`
 	Email string    `json:"email"`
 }
+
+type UserRegister struct {
+	Name     string `gorm:"type:varchar(100);" json:"name" validate:"required"`
+	Email    string `gorm:"type:varchar(50);unique;" json:"email" validate:"required,email"`
+	Password string `gorm:"type:text" json:"password" validate:"required,min=6"`
+}
+
+type UserLogin struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
+}
