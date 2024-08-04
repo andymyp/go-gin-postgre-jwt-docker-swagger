@@ -9,6 +9,14 @@ import (
 	"gorm.io/gorm"
 )
 
+// UserProfile 		godoc
+// @Security 			Bearer
+// @Summary      	User profile
+// @Tags         	User
+// @Accept       	json
+// @Produce      	json
+// @Success      	200 "ok"
+// @Router       	/user/profile [get]
 func UserProfile(c *gin.Context) {
 	getuser, _ := c.Get("user")
 	actualUser, _ := getuser.(models.UserResponse)
@@ -35,6 +43,14 @@ func UserProfile(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": 1, "data": response})
 }
 
+// GetMyPosts 		godoc
+// @Security 			Bearer
+// @Summary      	Get my posts
+// @Tags         	User
+// @Accept       	json
+// @Produce      	json
+// @Success      	200 "ok"
+// @Router       	/user/posts [get]
 func GetMyPosts(c *gin.Context) {
 	user, _ := c.Get("user")
 	actualUser, _ := user.(models.UserResponse)

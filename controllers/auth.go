@@ -9,6 +9,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Register 			godoc
+// @Summary      	Register user
+// @Tags         	Auth
+// @Accept       	json
+// @Produce      	json
+// @Param        	request body models.UserRegister true "Payload [Raw]"
+// @Success      	200 "ok"
+// @Router       	/auth/register [post]
 func Register(c *gin.Context) {
 	var user models.User
 
@@ -38,11 +46,16 @@ func Register(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": 1, "message": "Register success."})
 }
 
+// Login 					godoc
+// @Summary      	Login user
+// @Tags         	Auth
+// @Accept       	json
+// @Produce      	json
+// @Param        	request body models.UserLogin true "Payload [Raw]"
+// @Success      	200 "ok"
+// @Router       	/auth/login [post]
 func Login(c *gin.Context) {
-	var input struct {
-		Email    string `json:"email" validate:"required,email"`
-		Password string `json:"password" validate:"required"`
-	}
+	var input models.UserLogin
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"status": 0, "message": err.Error()})
@@ -89,6 +102,14 @@ func Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"status": 1, "data": response})
 }
 
+// TestAuth 			godoc
+// @Security 			Bearer
+// @Summary      	Test auth
+// @Tags         	Auth
+// @Accept       	json
+// @Produce      	json
+// @Success      	200 "ok"
+// @Router       	/auth/test [get]
 func TestAuth(c *gin.Context) {
 	user, _ := c.Get("user")
 	claims, _ := c.Get("claims")
