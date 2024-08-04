@@ -124,3 +124,19 @@ func UpdatePost(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"status": 1, "message": "Post updated."})
 }
+
+func DeletePost(c *gin.Context) {
+	user, _ := c.Get("user")
+	actualUser, _ := user.(models.UserResponse)
+
+	var post models.Post
+
+	id := c.Param("id")
+
+	if config.DB.Where("id=? AND user_id=?", id, actualUser.ID).Delete(&post).RowsAffected == 0 {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"status": 0, "message": "Delete post failed!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": 1, "message": "Post deleted."})
+}
