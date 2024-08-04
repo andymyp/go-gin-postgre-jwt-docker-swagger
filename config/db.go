@@ -41,7 +41,7 @@ func ConnectDatabase() {
 
 	fmt.Println("Connected to Database: ", sqlDB.Ping() == nil)
 
-	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.User{}, &models.Post{})
 
 	DB = db
 }
