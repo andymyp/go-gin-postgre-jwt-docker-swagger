@@ -18,6 +18,9 @@ services:
     ports:
       - "3000:3000"
     restart: on-failure
+    environment:
+      - APP_PORT=3000
+      - JWT_SECRET_KEY=@goginjwtscretkey!!
     depends_on:
       - postgresql_db
     links:
