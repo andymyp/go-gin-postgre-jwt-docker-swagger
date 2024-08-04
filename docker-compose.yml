@@ -11,3 +11,17 @@ services:
       - POSTGRES_DB=db_crud_api
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+
+  app:
+    container_name: api
+    build: .
+    ports:
+      - "3000:3000"
+    restart: on-failure
+    environment:
+      - APP_PORT=3000
+      - JWT_SECRET_KEY=@goginjwtscretkey!!
+    depends_on:
+      - postgresql_db
+    links:
+      - postgresql_db
