@@ -140,3 +140,32 @@ func DeletePost(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"status": 1, "message": "Post deleted."})
 }
+
+func SearchPosts(c *gin.Context) {
+	query := c.Query("query")
+
+	var post []models.Post
+
+	if err := config.DB.Debug().
+		Preload("User").
+		Where("title ILIKE ? OR content ILIKE ?", "%"+query+"%", "%"+query+"%").
+		Find(&post).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"status": 0, "message": err.Error()})
+		return
+	}
+
+	var response []models.PostResponse
+
+	for _, post := range post {
+		response = append(response, models.PostResponse{
+			ID:        post.ID,
+			User:      models.UserResponse{ID: post.User.ID, Name: post.User.Name, Email: post.User.Email},
+			Title:     post.Title,
+			Content:   post.Content,
+			CreatedAt: post.CreatedAt,
+			UpdatedAt: post.UpdatedAt,
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": 1, "data": response})
+}
