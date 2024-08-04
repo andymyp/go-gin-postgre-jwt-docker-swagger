@@ -79,7 +79,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	response := models.UserResponse{
+	response := models.LoginResponse{
 		ID:    user.ID,
 		Name:  user.Name,
 		Email: user.Email,

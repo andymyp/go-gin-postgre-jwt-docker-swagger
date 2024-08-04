@@ -30,6 +30,7 @@ func main() {
 	//! All Routes
 	routes.AuthRoute(router)
 	routes.UserRoute(router)
+	routes.PostRoute(router)
 
 	APP_PORT := os.Getenv("APP_PORT")
 	APP_PORT = fmt.Sprintf(":%s", APP_PORT)

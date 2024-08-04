@@ -10,11 +10,12 @@ import (
 )
 
 func UserProfile(c *gin.Context) {
+	getuser, _ := c.Get("user")
+	actualUser, _ := getuser.(models.UserResponse)
+
 	var user models.User
 
-	id := c.Param("id")
-
-	if err := config.DB.Where("id=?", id).First(&user).Error; err != nil {
+	if err := config.DB.Where("id=?", actualUser.ID).First(&user).Error; err != nil {
 		switch err {
 		case gorm.ErrRecordNotFound:
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"status": 0, "message": "User not found!"})
@@ -25,12 +26,37 @@ func UserProfile(c *gin.Context) {
 		}
 	}
 
-	response := models.UserProfile{
-		ID:        user.ID,
-		Name:      user.Name,
-		Email:     user.Email,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
+	response := models.UserResponse{
+		ID:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": 1, "data": response})
+}
+
+func GetMyPosts(c *gin.Context) {
+	user, _ := c.Get("user")
+	actualUser, _ := user.(models.UserResponse)
+
+	var post []models.Post
+
+	if err := config.DB.Debug().Preload("User").Where("user_id=?", actualUser.ID).Find(&post).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"status": 0, "message": err.Error()})
+		return
+	}
+
+	var response []models.PostResponse
+
+	for _, post := range post {
+		response = append(response, models.PostResponse{
+			ID:        post.ID,
+			User:      models.UserResponse{ID: post.User.ID, Name: post.User.Name, Email: post.User.Email},
+			Title:     post.Title,
+			Content:   post.Content,
+			CreatedAt: post.CreatedAt,
+			UpdatedAt: post.UpdatedAt,
+		})
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": 1, "data": response})
